@@ -28,6 +28,16 @@ public:
     MOCK_METHOD2(login, bool(std::string u, std::string p));
 };
 
+class Database {
+public:
+    Database(Connection& _conn): conn_(_conn){}
+    bool connect(std::string u, std::string p) {
+        return conn_.login(u, p);
+    }
+private:
+    Connection & conn_;
+};
+
 namespace y 
 {
     class A {
@@ -67,7 +77,14 @@ namespace x
 
 TEST(aaa,test4)
 {
+    Mock_Connection mock;
+    Database db(mock);
 
+    EXPECT_CALL(mock, login(::testing::_, ::testing::_))
+        .Times(1)
+        .WillOnce(::testing::Return(true));
+
+    ASSERT_TRUE(db.connect("john", "password"));
 }
 
 TEST(aaa,test3)
