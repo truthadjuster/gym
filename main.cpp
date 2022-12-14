@@ -87,6 +87,21 @@ namespace x
     };
 }
 
+TEST(hmmm,test1)
+{
+    class Obj {
+    public:
+        explicit Obj(int n) {
+            std::cout << n << std::endl;
+        }
+    };
+
+    Obj o(1);
+    Obj oo{2};
+    //ce Obj ooo = 3; 
+
+}
+
 TEST(lambda,test1)
 {
     int a = 3;
