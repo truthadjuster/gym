@@ -19,6 +19,7 @@ class Connection {
 public:
     virtual
     bool login(std::string u, std::string p) {
+        std::cout << u << "/" << p << std::endl;
         std::cout << "[" << this << "]" << "[login]\n";
         return true;
     }
@@ -36,6 +37,13 @@ public:
 private:
     Connection & conn_;
 };
+
+namespace z
+{
+    int addnum(int a, int b) {
+        return a + b;
+    }
+}
 
 namespace y 
 {
@@ -72,6 +80,35 @@ namespace x
         int n_ = 123;
         int pad = 0;
     };
+}
+
+TEST(lambda,test1)
+{
+    int a = 3;
+    int b = 4;
+    auto f = [&a]() {
+        std::cout << a << std::endl;
+        a = 69;
+    };
+
+    f();
+    ASSERT_EQ(69, a);
+}
+
+TEST(zzz,test1)
+{
+    auto f = std::bind(
+                z::addnum, 
+                std::placeholders::_1, 
+                std::placeholders::_2
+                );
+    ASSERT_EQ(7, f(3, 4));
+
+    Connection conn;
+    auto L = std::bind(&Connection::login,
+                &conn, "JOHN", std::placeholders::_1
+                );
+    ASSERT_TRUE(L("doe"));
 }
 
 TEST(ccc,test1)
@@ -118,6 +155,7 @@ TEST(aaa,test3)
     };
     #pragma pack(pop)
     ASSERT_EQ(sizeof(int) + sizeof(char), sizeof(T));
+
 #ifndef _WIN32
     struct __attribute__((packed)) Q {
         int a;
