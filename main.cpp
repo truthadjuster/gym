@@ -102,12 +102,13 @@ TEST(aaa,test3)
     };
     #pragma pack(pop)
     ASSERT_EQ(sizeof(int) + sizeof(char), sizeof(T));
-
+#ifndef _WIN32
     struct __attribute__((packed)) Q {
         int a;
         char b;
     };
     ASSERT_EQ(sizeof(int) + sizeof(char), sizeof(Q));
+#endif
 }
 
 TEST(aaa,test2)
