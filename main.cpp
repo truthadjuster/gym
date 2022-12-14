@@ -19,8 +19,12 @@ class Connection {
 public:
     virtual
     bool login(std::string u, std::string p) {
+        std::cout << "[" << this << "]" << "[login]\n";
         return true;
     }
+
+    Connection() { std::cout << "Connection\n"; }
+    ~Connection() { std::cout << "~Connection\n"; }
 };
 
 class Mock_Connection : public Connection {
@@ -73,6 +77,18 @@ namespace x
         int n_ = 123;
         int pad = 0;
     };
+}
+
+TEST(ccc,test1)
+{
+    std::shared_ptr<Connection> pconn;
+    ASSERT_EQ(nullptr, pconn);
+    {
+        pconn = std::make_shared<Connection>();
+        std::cout << "<" << pconn << ">\n";
+    }
+    ASSERT_NE(nullptr, pconn); // omg
+    pconn->login("user", "pass"); // omg
 }
 
 TEST(aaa,test4)
