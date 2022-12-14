@@ -30,8 +30,8 @@ public:
 
 class Database {
 public:
-    Database(Connection& _conn): conn_(_conn){}
-    bool connect(std::string u, std::string p) {
+    explicit Database(Connection& _conn): conn_(_conn){}
+    bool connect(const std::string& u, const std::string& p) {
         return conn_.login(u, p);
     }
 private:
@@ -50,7 +50,7 @@ namespace y
     class A {
     public:
         A(){std::cout << "!#$*\n";}
-        static void f(std::string s){std::cout << s << std::endl;}
+        static void f(const std::string& s){std::cout << s << std::endl;}
     };
 }
 
@@ -68,6 +68,11 @@ namespace x
     class A {
     public:
         int& n() {
+            f();
+            Point p;
+            p.x = 0;
+            p.y = 0;
+            std::cout << p.x << p.y;
             return n_;
         }
         int* get(){return &n_;}
@@ -248,7 +253,7 @@ TEST(aaa, test1)
     try {
         f(6,0);
         FAIL() << "*** ERROR ***\n";
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error& e) {
         ASSERT_STREQ("cannot be", e.what());
     }
 
