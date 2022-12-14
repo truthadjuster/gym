@@ -27,11 +27,6 @@ public:
     ~Connection() { std::cout << "~Connection\n"; }
 };
 
-class Mock_Connection : public Connection {
-public:
-    MOCK_METHOD2(login, bool(std::string u, std::string p));
-};
-
 class Database {
 public:
     Database(Connection& _conn): conn_(_conn){}
@@ -93,6 +88,11 @@ TEST(ccc,test1)
 
 TEST(aaa,test4)
 {
+    class Mock_Connection : public Connection {
+    public:
+        MOCK_METHOD2(login, bool(std::string u, std::string p));
+    };
+
     Mock_Connection mock;
     Database db(mock);
 
